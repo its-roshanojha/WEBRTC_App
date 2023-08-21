@@ -46,6 +46,7 @@ const Lobby = () => {
             className="form-control"
             id="exampleInputEmail1"
             value={email}
+            required
             onChange={(e) => setEmail(e.target.value)}
           />
           <div id="emailHelp" className="form-text">
@@ -60,6 +61,7 @@ const Lobby = () => {
             className="form-control"
             id="exampleInputPassword1"
             type="text"
+            required
             value={room}
             onChange={(e) => setRoom(e.target.value)}
           />

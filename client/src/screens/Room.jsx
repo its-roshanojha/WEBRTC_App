@@ -17,6 +17,7 @@ const Room = () => {
       }, []);
 
     // STEP:2 => Trigger this function when user clicks call. On the stream and emit an event user call
+    // STEP:3 => Also create an offer and send this offer to reciver so that he can get an incomming call
       const handleCallUser = useCallback(async () => {
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: true,
