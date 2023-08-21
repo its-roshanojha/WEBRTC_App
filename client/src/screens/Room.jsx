@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback, useState } from "react";
 import ReactPlayer from "react-player";
+import peer from "../service/peer";
 import { useSocket } from "../context/SocketProvider";
 
 
@@ -23,8 +24,8 @@ const Room = () => {
           audio: true,
           video: true,
         });
-        // const offer = await peer.getOffer();
-        // socket.emit("user:call", { to: remoteSocketId, offer });
+        const offer = await peer.getOffer();
+        socket.emit("user:call", { to: remoteSocketId, offer });
         setMyStream(stream);
       }, [remoteSocketId, socket]);
 
