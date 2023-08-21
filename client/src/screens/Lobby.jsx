@@ -1,24 +1,26 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { SocketProvider, useSocket } from "../context/SocketProvider";
 
 const Lobby = () => {
   const [email, setEmail] = useState("");
   const [room, setRoom] = useState("");
 
   const navigate = useNavigate();
+  const socket = useSocket();
 
   const handleSubmitForm = useCallback(
     (e) => {
       e.preventDefault();
-      // socket.emit("room:join", { email, room });
+      socket.emit("room:join", { email, room });
     }
-    //   [email, room, socket]
+     , [email, room, socket]
   );
 
   return (
     <div className="pt-3">
       <h1>Lobby</h1>
-      <form>
+      <form onSubmit={handleSubmitForm}>
         <div className="mb-3">
           <label className="form-label">
             Email address
