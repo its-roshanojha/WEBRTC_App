@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { SocketProvider, useSocket } from "../context/SocketProvider";
+import { useSocket } from "../context/SocketProvider";
 
 const Lobby = () => {
     const [email, setEmail] = useState("");
@@ -20,6 +20,7 @@ const Lobby = () => {
     const handleJoinRoom = useCallback(
       (data) => {
         const { email, room } = data;
+        console.log("JOINING THE ROOM FROM BE=>",{email, room})
         navigate(`/room/${room}`);
       },
       [navigate]
