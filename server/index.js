@@ -21,7 +21,7 @@ io.on("connection", (socket) => {
 
   socket.on("user:call", ({ to, offer }) => {
     console.log("TO and Offer",{to, offer})
-    // io.to(to).emit("incomming:call", { from: socket.id, offer });
+    io.to(to).emit("incomming:call", { from: socket.id, offer });
   });
 
 

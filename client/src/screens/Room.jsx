@@ -29,19 +29,34 @@ const Room = () => {
         setMyStream(stream);
       }, [remoteSocketId, socket]);
 
+    //   STEP:4 => Handling Incomming call. started a stream and creating the 
+    const handleIncommingCall = useCallback(
+        async ({ from, offer }) => {
+          setRemoteSocketId(from);
+          const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true,
+          });
+          setMyStream(stream);
+          console.log(`Incoming Call`, from, offer);
+
+        },
+        [socket]
+      );
+
         useEffect(() => {
             socket.on("user:joined", handleUserJoined);
-            // socket.on("incomming:call", handleIncommingCall);
+            socket.on("incomming:call", handleIncommingCall);
 
             return () => {
             socket.off("user:joined", handleUserJoined);
-            // socket.off("incomming:call", handleIncommingCall);
+            socket.off("incomming:call", handleIncommingCall);
 
             };
         }, [
             socket,
             handleUserJoined,
-            // handleIncommingCall,
+            handleIncommingCall,
 
         ]);
 
