@@ -29,7 +29,8 @@ const Room = () => {
         setMyStream(stream);
       }, [remoteSocketId, socket]);
 
-    //   STEP:4 => Handling Incomming call. started a stream and creating the 
+    //   STEP:4 => Handling Incomming call. started a stream and logging the data i.e offer
+    //   STEP:5 => Setting the remote Description using get answer and the offer as arg. 
     const handleIncommingCall = useCallback(
         async ({ from, offer }) => {
           setRemoteSocketId(from);
@@ -39,18 +40,32 @@ const Room = () => {
           });
           setMyStream(stream);
           console.log(`Incoming Call`, from, offer);
-
+          const ans = await peer.getAnswer(offer);
+          socket.emit("call:accepted", { to: from, ans });
         },
         [socket]
       );
 
+    //  STEP:6 => Call:Accepted 
+    const handleCallAccepted = useCallback(
+        ({ from, ans }) => {
+          peer.setLocalDescription(ans);
+          console.log("Call Accepted!");
+        //   sendStreams();
+        },
+        // [sendStreams]
+      );
+    
+
         useEffect(() => {
             socket.on("user:joined", handleUserJoined);
             socket.on("incomming:call", handleIncommingCall);
+            socket.on("call:accepted", handleCallAccepted);
 
             return () => {
             socket.off("user:joined", handleUserJoined);
             socket.off("incomming:call", handleIncommingCall);
+            socket.off("call:accepted", handleCallAccepted);    
 
             };
         }, [
@@ -63,10 +78,12 @@ const Room = () => {
 
   return (
     <>
-        <div>Room</div>
-        <h4>{remoteSocketId ? "Connected" : "No one in room"}</h4>
-        {remoteSocketId && <button onClick={handleCallUser}>CALL</button>}
-        {myStream && (
+         <div>
+      <h1>Room Page</h1>
+      <h4>{remoteSocketId ? "Connected" : "No one in room"}</h4>
+      {myStream && <button onClick={sendStreams}>Send Stream</button>}
+      {remoteSocketId && <button onClick={handleCallUser}>CALL</button>}
+      {myStream && (
         <>
           <h1>My Stream</h1>
           <ReactPlayer
@@ -78,7 +95,19 @@ const Room = () => {
           />
         </>
       )}
-
+      {remoteStream && (
+        <>
+          <h1>Remote Stream</h1>
+          <ReactPlayer
+            playing
+            muted
+            height="100px"
+            width="200px"
+            url={remoteStream}
+          />
+        </>
+      )}
+    </div>
     </>
     
     

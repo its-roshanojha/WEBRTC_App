@@ -24,5 +24,10 @@ io.on("connection", (socket) => {
     io.to(to).emit("incomming:call", { from: socket.id, offer });
   });
 
+  socket.on("call:accepted", ({ to, ans }) => {
+    console.log("Called accepted",to, ans);
+    io.to(to).emit("call:accepted", { from: socket.id, ans });
+  });
+
 
 });
